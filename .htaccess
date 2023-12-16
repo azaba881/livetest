@@ -1,0 +1,35 @@
+#Order Deny,Allow
+#Deny from all
+#Allow from 156.0.212.61 195.123.209.64
+
+<IfModule mod_rewrite.c>
+Options +FollowSymLinks
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/public/ 
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ /public/$1 
+#RewriteRule ^ index.php [L]
+RewriteRule ^(/)?$ public/index.php [L] 
+
+# Bloquer HTTrack et autres outils de copie
+    RewriteCond %{HTTP_USER_AGENT} ^HTTrack [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^SiteSucker [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebCopier [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebZIP [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Teleport [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^wget [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebReaper [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Tightpoker [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^HTTP\ tool [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebStripper [NC]
+    RewriteRule ^.*$ - [F,L]
+</IfModule>
+
+Options -Indexes
+
+<Files .env>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
